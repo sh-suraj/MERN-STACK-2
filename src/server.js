@@ -1,15 +1,12 @@
 import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
-const PORT = process.env.PORT;
-const VERSION = process.env.VERSION;
+import config from "./config/config.js";
 
 const server = express();
 
 server.get("/", (req, res) => {
   res.status(200).json({
-    port: PORT,
-    version: VERSION ,
+    port: config.port,
+    version: config.version,
   });
 });
 server.get("/not-found", (request, response) => {
@@ -22,6 +19,6 @@ server.put("/", (req, res) => {
   res.status(201).send("Data updated successfully");
 });
 
-server.listen(PORT, () => {
-  console.log(`server running at port ${PORT}`);
+server.listen(config.port, () => {
+  console.log(`server running at port ${config.port}`);
 });
