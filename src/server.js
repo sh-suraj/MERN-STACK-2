@@ -1,6 +1,6 @@
 import express from "express";
 import config from "./config/config.js";
-
+import productRoutes from "../src/routes/ProductRoute.js";
 const server = express();
 
 server.get("/", (req, res) => {
@@ -19,6 +19,7 @@ server.put("/", (req, res) => {
   res.status(201).send("Data updated successfully");
 });
 
+server.use("/products", productRoutes);
 server.listen(config.port, () => {
   console.log(`server running at port ${config.port}`);
 });
