@@ -21,4 +21,14 @@ const deleteProduct = (req, res) => {
   console.log("Deleted a product");
   res.status(200).send("Product Deleted!");
 };
-export default { getProducts, updateProduct, getProductById, deleteProduct };
+const createProduct = (req, res) => {
+  productService.createProduct(req.body);
+  res.send("Products created");
+};
+export default {
+  getProducts,
+  updateProduct,
+  getProductById,
+  deleteProduct,
+  createProduct,
+};

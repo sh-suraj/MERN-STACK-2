@@ -18,4 +18,9 @@ const uProductById = () => {
   return filteredProducts;
 };
 
-export default { getProduct, productById, uProductById };
+const createProduct = (data) => {
+  //create product
+  products.push(data);
+  fs.writeFileSync("./src/models/products.json", JSON.stringify(products));
+};
+export default { getProduct, productById, uProductById, createProduct };

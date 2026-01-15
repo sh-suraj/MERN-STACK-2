@@ -34,7 +34,7 @@
   {
     "id": "MED003",
     "name": "Cetirizine Syrup",
-    "brand": "Dr Reddy",
+    "brand": "Dr Reddy’s",
     "category": "Syrup",
     "description": "Provides relief from allergy symptoms such as sneezing and itching.",
     "price": 90,
@@ -157,6 +157,22 @@
     "expiryDate": "2026-07-08",
     "manufacturer": "Allergan Inc.",
     "image": "eye-drops.jpg",
+    "status": "active"
+  },
+  {
+    "id": "MED050",
+    "name": "Paracetamol 500mg",
+    "brand": "Pentop",
+    "category": "Tablet",
+    "description": "Used to treat fever and mild to moderate pain.",
+    "price": 50,
+    "discountPercentage": 5,
+    "stock": 200,
+    "prescriptionRequired": true,
+    "dosage": "500 mg",
+    "expiryDate": "2027-05-01",
+    "manufacturer": "Pentop Ltd",
+    "image": "paracetamol.jpg",
     "status": "active"
   }
 ]

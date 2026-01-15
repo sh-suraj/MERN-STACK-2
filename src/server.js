@@ -1,7 +1,11 @@
 import express from "express";
+import bodyParser from "body-parser";
+
 import config from "./config/config.js";
 import productRoutes from "../src/routes/ProductRoute.js";
 const server = express();
+
+server.use(bodyParser.json());
 
 server.get("/", (req, res) => {
   res.status(200).json({
