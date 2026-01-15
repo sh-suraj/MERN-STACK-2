@@ -6,10 +6,10 @@ const sproduct = () => {
 
   return filteredProducts;
 };
-const productById = () => {
-  const rawdata = fs.readFileSync("./src/models/products.json", "utf8");
-  const products = JSON.parse(rawdata);
-  const filteredProducts = products.filter((rawdata) => rawdata.id == "MED001");
+const productById = (productId) => {
+  const med = fs.readFileSync("./src/models/products.json", "utf8");
+  const products = JSON.parse(med);
+  const filteredProducts = products.find((med) => med.id == productId);
 
   return filteredProducts;
 };

@@ -1,6 +1,6 @@
 # MERN Stack E-Commerce Website (Backend)
 
-A scalable and production-ready backend built using **Node.js, Express.js, MongoDB**, following clean architecture and REST API best practices. This backend serves as the core API layer for a MERN stack e-commerce application.
+just **studying** not for **production**!!
 
 ---
 
@@ -14,6 +14,12 @@ A scalable and production-ready backend built using **Node.js, Express.js, Mongo
 - **dotenv** – Environment variable management
 
 ---
+
+## Requests Methods
+
+- params
+- query
+- body
 
 ## Cases
 

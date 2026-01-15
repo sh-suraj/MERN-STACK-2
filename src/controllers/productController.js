@@ -6,7 +6,8 @@ const getProducts = (req, res) => {
 };
 
 const getProductById = (req, res) => {
-  const response = productService.productById();
+  const productId = req.params.id;
+  const response = productService.productById(productId);
   res.send(response);
   return;
 };
