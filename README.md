@@ -21,6 +21,52 @@ just **studying** not for **production**!!
 - query
 - body
 
+## PostgreSql commands
+
+```
+\list;       ---> check list of existing databse
+\! cls;       ---> clear screen
+\c <database-name>; ---> change database name
+drop database <database-name>; ---> deletes the database
+
+CRUD
+
+create a table:
+query->
+CREATE TABLE product(
+  id INT,
+  name VARCHAR(100),
+  city VARCHAR(100)
+);
+
+\d product ---> opens table person
+insert data in tables:
+query->
+INSERT INTO product(id, name, brand)
+values('001', 'Paracetamol 500mg', 'Cipla'), ('002', 'Azithromycin 500 mg', 'Time-pharmacuticals');
+
+read from table:
+SELECT * FROM product ---> selects every column
+SELECT name FROM product ---> selects name column
+SELECT name, id FROM product ---> selects name and id column
+
+update from db
+UPDATE product
+SET name = 'Flexon'
+WHERE id = '001';
+
+Delete from db
+DELETE FROM product
+WHERE id='001';
+
+Data Types: 
+Numeric: INT DOUBLE FLOAT DECIMAL
+String: VARCHAR
+Date: DATE
+Boolean: BOOLEAN
+
+```
+
 ## Cases
 
 ```text
