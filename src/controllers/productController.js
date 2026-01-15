@@ -1,7 +1,8 @@
 import productService from "../services/productService.js";
 const getProducts = (req, res) => {
-  const response = productService.sproduct();
-  res.send(response);
+  const brand = req.query.brand;
+  const response = productService.getProduct(brand);
+  res.json(response);
   return;
 };
 

@@ -1,24 +1,21 @@
 import fs from "fs";
-const sproduct = () => {
-  const rawdata = fs.readFileSync("./src/models/products.json", "utf8");
-  const products = JSON.parse(rawdata);
-  const filteredProducts = products.filter((rawdata) => rawdata.price < 50);
+const med = fs.readFileSync("./src/models/products.json", "utf8");
+const products = JSON.parse(med);
 
-  return filteredProducts;
+const getProduct = (query) => {
+  const foundProduct = products.filter((med) => med.brand == query);
+  return foundProduct;
 };
+
 const productById = (productId) => {
-  const med = fs.readFileSync("./src/models/products.json", "utf8");
-  const products = JSON.parse(med);
   const filteredProducts = products.find((med) => med.id == productId);
-
   return filteredProducts;
 };
+
 const uProductById = () => {
-  const rawdata = fs.readFileSync("./src/models/products.json", "utf8");
-  const products = JSON.parse(rawdata);
-  const filteredProducts = products.filter((rawdata) => rawdata.id == "MED002");
+  const filteredProducts = products.filter((med) => med.id == "MED002");
 
   return filteredProducts;
 };
 
-export default { sproduct, productById, uProductById };
+export default { getProduct, productById, uProductById };
