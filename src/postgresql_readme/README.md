@@ -1,64 +1,114 @@
-# PostgreSQL Notes
+# PostgreSQL Learning Notes
 
-This folder contains PostgreSQL learning notes and interview-ready
-SQL examples practiced as part of the MERN Stack.
+This directory contains my **PostgreSQL learning journey**, including:
+
+- Beginner-friendly notes
+- Interview-ready concepts
+- Real `psql` practice with outputs
+
+The goal is to document **concepts + hands-on SQL**, not just theory.
 
 ---
 
-## 📘 Beginner Notes
+## Learning Path
 
-Covers PostgreSQL fundamentals with hands-on examples:
+### 1️ Beginner SQL Notes
 
-- Creating tables
-- Inserting data
-- WHERE, IN, BETWEEN
-- ORDER BY, LIMIT
-- LIKE / ILIKE
+Start here if you are new to PostgreSQL.
+
+**Topics Covered**
+
+- What is PostgreSQL
+- Creating databases & tables
+- Data types
+- INSERT, SELECT
+- WHERE clause
+- Logical operators (AND, OR, NOT)
+- IN / NOT IN
+- BETWEEN
+- DISTINCT
+- ORDER BY
+- LIMIT
+- LIKE operator
 - Aggregate functions
 - GROUP BY
 
-👉 [Read Beginner SQL Notes](./postgresql-beginner-notes.md)
+👉 **Read here:**  
+🔗 [postgresql-beginner-notes.md](./postgresql-beginner-notes.md)
 
 ---
 
-## 🎯 Interview-Ready Notes
+### 2️⃣ Hands-on Practice (psql Output)
 
-Quick revision notes focused on common interview questions:
+Real terminal commands executed inside `psql`.
 
-- WHERE vs HAVING
+**Includes**
+
+- CREATE TABLE
+- INSERT records
+- SELECT queries
+- Filtering & sorting
+- Aggregate queries
+- GROUP BY examples
+- Actual query results
+
+  **Practice examples:**  
+  🔗 [example.md](./example.md)
+
+---
+
+### 3️⃣ Interview-Ready SQL Notes
+
+Focused on **questions and concepts frequently asked in interviews**.
+
+**Topics Covered**
+
+- Aggregate vs Scalar functions
+- GROUP BY vs WHERE vs HAVING
+- NULL handling
 - LIKE vs ILIKE
-- GROUP BY rules
 - COUNT(\*) vs COUNT(column)
-- Common SQL mistakes
+- Common SQL interview questions
 
-👉 [Read Interview SQL Notes](./postgresql-interview-notes.md)
-
----
-
-## 🧪 Full SQL Examples (Practice Logs)
-
-Contains full PostgreSQL command history with real terminal output
-used during practice.
-
-👉 [View Full SQL Examples](./example.md)
+  **Interview prep:**  
+  🔗 [postgresql-interview-notes.md](./postgresql-interview-notes.md)
 
 ---
 
-## 🧠 How to Use
+## 🆕 Additional Topics Studied
 
-- Start with **Beginner Notes** if you are learning PostgreSQL
-- Use **Interview Notes** for quick revision before interviews
+_(Recently added / in progress)_
+
+- String Functions and operations (completed)
+- ⏳ JOINs (INNER, LEFT, RIGHT)
+- ⏳ Subqueries
+- ⏳ UPDATE & DELETE
+- ⏳ Constraints (PRIMARY KEY, FOREIGN KEY, UNIQUE)
+- ⏳ Indexes & performance basics
+- ⏳ Transactions (BEGIN, COMMIT, ROLLBACK)
+
+> These topics will be added gradually with examples.
 
 ---
 
-## 📌 Part of MERN Stack Learning
+## 🛠 Tools Used
 
-These notes are part of my MERN Stack learning journey and will be
-expanded with:
+- PostgreSQL 16
+- psql CLI
+- VS Code
 
-- JOINs
-- Subqueries
-- Indexes
-- Transactions
+---
+
+## 🎯 Goal
+
+To build **strong SQL fundamentals** for:
+
+- Backend development
+- MERN stack projects
+- Technical interviews
+
+---
+
+📌 _This README will evolve as I continue learning PostgreSQL._
 
 **_star this repo if you love my notes!!_**

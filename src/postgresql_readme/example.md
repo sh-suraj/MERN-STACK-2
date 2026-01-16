@@ -254,6 +254,8 @@ ecommerce=# SELECT * FROM employees WHERE fname like '_n%';
 
 ```
 
+---
+
 ### Aggregate Functions - Count, Min, Max, Avg, etc.
 
 ```sql
@@ -295,6 +297,8 @@ ecommerce=# SELECT MAX(salary) FROM employees;
 
 ```
 
+---
+
 ### GROUP BY
 
 ```sql
@@ -332,3 +336,202 @@ ecommerce=# SELECT dept,SUM(salary) FROM employees GROUP BY dept;
  HR              |  92000
 (6 rows)
 ```
+
+---
+
+### String Operations:
+
+- CONCAT, CONCAT_WS
+- SUBSTR
+- LEFT, RIGHT
+- UPPER, LOWER
+- TRIM, LTRIM, RTRIM
+- REPLACE
+- POSITION
+- STRING_AGG
+
+**_CONCAT , CONCAT_WS_**
+
+```sql
+ecommerce=# SELECT CONCAT(fname, lname) FROM employees;
+    concat
+--------------
+ RajSharma
+ PriyaSingh
+ ArjunVerma
+ SumanPatel
+ KavitaRao
+ AmitGupta
+ NehaDesai
+ RahulKumar
+ AnjaliMeheta
+ RabinDahal
+ AnjalLuitel
+(11 rows)
+
+ecommerce=# SELECT emp_id, CONCAT(fname, lname) AS Fullname, dept FROM employees;
+ emp_id |   fullname   |      dept
+--------+--------------+-----------------
+      1 | RajSharma    | IT
+      2 | PriyaSingh   | HR
+      3 | ArjunVerma   | IT
+      4 | SumanPatel   | Finance
+      5 | KavitaRao    | HR
+      6 | AmitGupta    | Marketing
+      7 | NehaDesai    | IT
+      8 | RahulKumar   | IT
+      9 | AnjaliMeheta | Finance
+     11 | RabinDahal   | Manager
+     10 | AnjalLuitel  | General Manager
+(11 rows)
+
+
+
+ecommerce=# SELECT emp_id, CONCAT_WS('-',fname, lname) AS Fullname, dept FROM employees;
+ emp_id |   fullname    |      dept
+--------+---------------+-----------------
+      1 | Raj-Sharma    | IT
+      2 | Priya-Singh   | HR
+      3 | Arjun-Verma   | IT
+      4 | Suman-Patel   | Finance
+      5 | Kavita-Rao    | HR
+      6 | Amit-Gupta    | Marketing
+      7 | Neha-Desai    | IT
+      8 | Rahul-Kumar   | IT
+      9 | Anjali-Meheta | Finance
+     11 | Rabin-Dahal   | Manager
+     10 | Anjal-Luitel  | General Manager
+(11 rows)
+
+
+ecommerce=# SELECT emp_id, CONCAT_WS(' ',fname, lname) AS Fullname, dept FROM employees;
+ emp_id |   fullname    |      dept
+--------+---------------+-----------------
+      1 | Raj Sharma    | IT
+      2 | Priya Singh   | HR
+      3 | Arjun Verma   | IT
+      4 | Suman Patel   | Finance
+      5 | Kavita Rao    | HR
+      6 | Amit Gupta    | Marketing
+      7 | Neha Desai    | IT
+      8 | Rahul Kumar   | IT
+      9 | Anjali Meheta | Finance
+     11 | Rabin Dahal   | Manager
+     10 | Anjal Luitel  | General Manager
+(11 rows)
+
+```
+
+---
+
+**_substr, replace_**
+
+```sql
+ecommerce=# SELECT SUBSTR(fname, 1,3) FROM employees;
+ substr
+--------
+ Raj
+ Pri
+ Arj
+ Sum
+ Kav
+ Ami
+ Neh
+ Rah
+ Anj
+ Rab
+ Anj
+(11 rows)
+
+
+ecommerce=# SELECT REPLACE('hello world','hello','*uck');
+  replace
+------------
+ *uck world
+(1 row)
+
+```
+
+---
+
+**_Reverse & Length_**
+
+```sql
+select REVERSE('hello');
+ reverse
+---------
+ olleh
+(1 row)
+
+select LENGTH('hello');
+ length
+--------
+      5
+(1 row)
+
+ecommerce=# select * from employees WHERE LENGTH(fname)>5;
+ emp_id | fname  | lname  |           email           |  dept   | salary | hire_date
+--------+--------+--------+---------------------------+---------+--------+------------
+      5 | Kavita | Rao    | kavita.rao@email.com      | HR      |  47000 | 2026-01-16
+      9 | Anjali | Meheta | anjali.meheta@outlook.com | Finance |  61000 | 2026-01-16
+(2 rows)
+```
+
+---
+
+**_upper and lower, left & right, trim and position_**
+
+```sql
+--UPPER PRINTS ALL THE CHARACTERS IN UPPER CASE--
+ecommerce=# SELECT UPPER(fname) FROM employees LIMIT 3;
+ upper
+-------
+ RAJ
+ PRIYA
+ ARJUN
+(3 rows)
+
+--LOWER PRINTS THE SELECTED COLUMN IN LOWER CASE--
+ecommerce=# SELECT LOWER(fname) FROM employees LIMIT 3;
+ lower
+-------
+ raj
+ priya
+ arjun
+(3 rows)
+
+--LEFT IS USED TO PRINT ANY NO. OF CHARACTERS FROM THE LEFT --
+ecommerce=# SELECT LEFT(fname, 3) FROM employees LIMIT 3;
+ left
+------
+ Raj
+ Pri  --THE NAME WAS PRIYA--
+ Arj  --THE NAME WAS ARJUN--
+(3 rows)
+
+--RIGHT IS USED TO PRINT ANY NO. OF CHARACTERS FROM THE RIGHT --
+ecommerce=# SELECT RIGHT(fname, 3) FROM employees LIMIT 3;
+ right
+-------
+ Raj
+ iya  --THE NAME WAS PRIYA--
+ jun  --THE NAME WAS ARJUN--
+(3 rows)
+
+--TRIM IS USED TO TRIM SPACE FROM LEFT AND RIGHT--
+ecommerce=# SELECT LENGTH(TRIM('    ALRIGHT     '));
+ length
+--------
+      7
+(1 row)
+
+--position: shows the position of substring inside the string.--
+--task: select position ('om' in 'thomas');--
+ecommerce=# select position ('om' in 'thomas');
+ position
+----------
+        3
+(1 row)
+```
+
+---
