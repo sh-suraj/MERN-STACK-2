@@ -1,4 +1,23 @@
-### PostgreSQL
+# PostgreSQL Practice Examples (psql Output)
+
+This file contains **raw PostgreSQL practice commands and outputs**
+executed inside the `ecommerce` database using the `psql` terminal.
+
+📌 These examples are intentionally kept **unfiltered** to reflect
+real database interaction during learning.
+
+---
+
+## 🔗 Related Notes
+
+- 📘 [Beginner SQL Notes](./postgresql-beginner-notes.md)
+- 🎯 [Interview-Ready SQL Notes](./postgresql-interview-notes.md)
+
+> 👉 If you are learning PostgreSQL, start with **Beginner Notes**  
+> 👉 If you are revising for interviews, read **Interview Notes**  
+> 👉 Use this file for **hands-on reference**
+
+---
 
 ### creating a table on database ecommerce
 
@@ -46,6 +65,8 @@ ecommerce=# SELECT * FROM employees;
       9 | Anjali | Meheta | anjali.meheta@outlook.com | Finance   |  61000 | 2026-01-16
      10 | Anjal  | Luitel | anjal.luitel@outlook.com  | Manager   | 500000 | 2026-01-16
 ```
+
+---
 
 ### clauses:
 
@@ -426,6 +447,8 @@ ecommerce=# SELECT emp_id, CONCAT_WS(' ',fname, lname) AS Fullname, dept FROM em
 
 **_substr, replace_**
 
+**Syntax: select substr(string/column_name, start_index, end_index);**
+
 ```sql
 ecommerce=# SELECT SUBSTR(fname, 1,3) FROM employees;
  substr
@@ -535,3 +558,199 @@ ecommerce=# select position ('om' in 'thomas');
 ```
 
 ---
+
+### Task1:
+
+      - 1:Raj:sharma:IT
+
+```sql
+ecommerce=# select concat_ws(':',emp_id,fname,lname,dept)from employees where emp_id=1;
+    concat_ws
+-----------------
+ 1:Raj:Sharma:IT
+(1 row)
+```
+
+### TASK2:
+
+      - 1:Raj Sharma:IT:50000
+
+```sql
+
+ecommerce=# select concat_ws(':',emp_id,concat_ws(' ',fname,lname),dept,salary)from employees where emp_id=1;
+       concat_ws
+-----------------------
+ 1:Raj Sharma:IT:50000
+(1 row)
+```
+
+### TASK 3:
+
+      - 4:Suman:FINANCE
+
+```sql
+ecommerce=# select * from employees where fname='Suman';
+ emp_id | fname | lname |         email         |  dept   | salary | hire_date
+--------+-------+-------+-----------------------+---------+--------+------------
+4 | Suman | Patel | Suman.patel@gmail.com | Finance |  60000 | 2026-01-16
+(1 row)
+
+ecommerce=# select concat_ws(':', fname, upper(dept)) from employees where emp_id=4;
+   concat_ws
+---------------
+ Suman:FINANCE
+(1 row)
+```
+
+### TASK 4:
+
+      - I1 Raju
+      - H2 Priya
+
+```sql
+ecommerce=# select concat(substr(dept,1,1),concat_ws(' ',emp_id,fname)) from employees limit 2;
+  concat
+----------
+ I1 Raj
+ H2 Priya
+(2 rows)
+
+```
+
+### TASK 5: find all the employees having highest salary;
+
+- we can do this using sub query:
+
+```sql
+--can be done for lowest too; it is better than using order by desc and last name--
+
+
+SELECT * FROM employees
+WHERE
+salary = ( SELECT MAX(salary) from employees);
+
+ emp_id | fname | lname  |          email           |      dept       | salary | hire_date
+--------+-------+--------+--------------------------+-----------------+--------+------------
+     10 | Anjal | Luitel | anjal.luitel@outlook.com | General Manager | 500000 | 2026-01-16
+(1 row)
+```
+
+---
+
+## Alter Queries
+
+### Alter Table
+
+**_syntax:_**
+
+```sql
+--add column--
+ALTER TABLE <table-name>
+ADD COLUMN <new-column-name> <data-type>;
+-- delete column--
+ALTER TABLE <table-name>
+DROP COLUMN <column-name>;
+--rename column--
+ALTER TABLE <table-name>
+RENAME COLUMN <column-name> to <new-name>;
+```
+
+## ------------Example -------------
+
+```sql
+ecommerce=# select * from userdata;
+ id |   name    |  role
+----+-----------+--------
+  1 | sushant   | buyer
+  2 | Ram       | seller
+  3 | shyaam    | seller
+  4 | hari      | admin
+  6 | suarj     | admin
+  5 | chhyosang | buyer
+  7 | Diwash    | buyer
+
+ecommerce=# ALTER TABLE userdata
+ecommerce-# ADD COLUMN age INT;
+ALTER TABLE
+ecommerce=# select * from userdata limit 1;
+ id |   name    |  role  | age
+----+-----------+--------+-----
+  1 | sushant   | buyer  |
+(1 row)
+
+--to delete column--
+ecommerce=# alter table userdata Drop column age;
+ALTER TABLE
+ecommerce=# select * from userdata limit 1;
+ id |   name    |  role
+----+-----------+--------
+  1 | sushant   | buyer
+(1 row)
+
+--rename column example--
+alter table userdata ADD column age INT NOT NULL DEFAULT 0;
+ALTER TABLE
+alter table userdata rename column age to contacts;
+ALTER TABLE
+ecommerce=# select * from userdata limit 1;
+ id |   name    |  role  | contacts
+----+-----------+--------+----------
+  1 | sushant   | buyer  |        0
+(1 row)
+
+--rename table--
+ecommerce=# alter table userdata rename to users;
+ALTER TABLE
+ecommerce=# select * from users limit 1;
+ id |  name   | role  | contacts
+----+---------+-------+----------
+  1 | sushant | buyer |        0
+(1 row)
+
+-- to change data type / increase string capacity--
+ALTER TABLE users
+alter column contacts
+set data type varchar(20);
+
+alter table users
+alter column contacts
+set default 'unknown';
+
+ecommerce=# \d users
+                                      Table "public.users"
+  Column  |         Type          | Collation | Nullable |               Default
+----------+-----------------------+-----------+----------+--------------------------------------
+ id       | integer               |           | not null | nextval('userdata_id_seq'::regclass)
+ name     | character varying(50) |           |          |
+ role     | character varying(7)  |           |          | 'buyer'::character varying
+ contacts | character varying(20) |           | not null | 'unknown'::character varying
+Indexes:
+    "userdata_pkey" PRIMARY KEY, btree (id)
+
+```
+
+---
+
+**update & delete query:**
+
+```sql
+ecommerce=# update users
+ecommerce-# set contacts = '+977 9815186669'
+ecommerce-# where id= 1;
+UPDATE 1
+ecommerce=# select * from users where id=1;
+ id |  name   | role  |    contacts
+----+---------+-------+-----------------
+  1 | sushant | buyer | +977 9815186669
+(1 row)
+
+SQL cannot “delete a value”; it can only update it to NULL or another value.
+
+update users set contacts = null where id =1;
+--this will set value to null--
+update users set contacts = '0' where id =1;
+--sets to another value--
+--delete query deletes the entire row of database;
+DELETE FROM users where id =1; -- not recomemded
+--deletes entire row having id=1;
+```
