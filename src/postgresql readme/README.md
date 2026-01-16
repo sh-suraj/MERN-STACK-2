@@ -1,11 +1,14 @@
 ### PostgreSQL
+
 ### creating a table on database ecommerce
+
 ```bash
 psql (16.1)
 Type "help" for help.
 psql -U postgres -d ecommerce
 
 ```
+
 ```sql
 ecommerce=# CREATE TABLE employees(
 ecommerce(# emp_id SERIAL PRIMARY KEY,
@@ -26,7 +29,7 @@ ecommerce=# INSERT INTO employees(fname, lname, email, dept, salary) VALUES('Pri
 .
 .
 .
-INSERT INTO employees(fname, lname, email, dept, salary) VALUES('Anjal', 'Luitel', 'anjal.luitel@outlook.com', 'HR', '500000');
+INSERT INTO employees(fname, lname, email, dept, salary) VALUES('Anjal', 'Luitel', 'anjal.luitel@outlook.com', 'General Manager', '500000');
 
 
 ecommerce=# SELECT * FROM employees;
@@ -44,20 +47,22 @@ ecommerce=# SELECT * FROM employees;
      10 | Anjal  | Luitel | anjal.luitel@outlook.com  | Manager   | 500000 | 2026-01-16
 ```
 
-### clauses: 
-- where
-      eg:  - select * from employees where id=4;
-- logical operators: 
-    - AND 
-    - OR
-    - NOT
+### clauses:
 
-- IN and NOT IN 
-    - eg: select * from employees where dept in IT; // selects all data of dept in it 
-    - eg: select * from employees where dept not in IT; // selects all data of dept not in it
-- selecting a column: 
-      -  SELECT dept from employees; // selects all department even shows duplicates.
-      - SELECT DISTINCT dept from employees; // selects all department without duplicates.
+- where
+  eg: - select \* from employees where id=4;
+- logical operators:
+
+  - AND
+  - OR
+  - NOT
+
+- IN and NOT IN
+  - eg: select \* from employees where dept in IT; // selects all data of dept in it
+  - eg: select \* from employees where dept not in IT; // selects all data of dept not in it
+- selecting a column:
+  - SELECT dept from employees; // selects all department even shows duplicates.
+  - SELECT DISTINCT dept from employees; // selects all department without duplicates.
 
 ```sql
     SELECT * FROM employees
@@ -124,4 +129,82 @@ ecommerce=# select distinct dept from employees;
  IT
  HR
 (5 rows)
+```
+
+**_sorting the data_**
+
+- **ORDER BY** - it is by default ascending if you want in descending order use DESC at last! eg:
+
+```Sql
+             SELECT * FROM employees ORDER BY fname DESC;
+```
+
+**CLAUSE: LIMIT**
+
+```sql
+    SELECT * FROM employees LIMIT 3;
+```
+
+**_ CLAUSE: LIKE _**
+
+```sql
+    SELECT * FROM employees WHERE fname LIKE 'A%';
+```
+
+```sql
+ecommerce=#  SELECT * FROM employees ORDER BY fname;
+ emp_id | fname  | lname  |           email           |      dept       | salary  | hire_date
+--------+--------+--------+---------------------------+-----------------+---------+------------
+      6 | Amit   | Gupta  | amit.gupta@outlook.com    | Marketing       |   52000 | 2026-01-16
+     10 | Anjal  | Luitel | anjal.luitel@outlook.com  | General Manager |  500000 | 2026-01-16
+      9 | Anjali | Meheta | anjali.meheta@outlook.com | Finance         |   61000 | 2026-01-16
+      3 | Arjun  | Verma  | arjun.verma@gmail.com     | IT              |   55000 | 2026-01-16
+      5 | Kavita | Rao    | kavita.rao@email.com      | HR              |   47000 | 2026-01-16
+      7 | Neha   | Desai  | neha.desai@outlook.com    | IT              |   48000 | 2026-01-16
+      2 | Priya  | Singh  | priya.singh@outlook.com   | HR              |   45000 | 2026-01-16
+     11 | Rabin  | Dahal  | rabin.dahal@outlook.com   | Manager         |  120000 | 2026-01-16
+      8 | Rahul  | Kumar  | rahul.kumar@outlook.com   | IT              |   53000 | 2026-01-16
+      1 | Raj    | Sharma | raj.sharma@outlook.com    | IT              |   50000 | 2026-01-16
+      4 | Suman  | Patel  | Suman.patel@gmail.com     | Finance         |   60000 | 2026-01-16
+(11 rows)
+
+
+
+ecommerce=#  SELECT * FROM employees ORDER BY fname DESC;
+ emp_id | fname  | lname  |           email           |      dept       | salary  | hire_date
+--------+--------+--------+---------------------------+-----------------+---------+------------
+      4 | Suman  | Patel  | Suman.patel@gmail.com     | Finance         |   60000 | 2026-01-16
+      1 | Raj    | Sharma | raj.sharma@outlook.com    | IT              |   50000 | 2026-01-16
+      8 | Rahul  | Kumar  | rahul.kumar@outlook.com   | IT              |   53000 | 2026-01-16
+     11 | Rabin  | Dahal  | rabin.dahal@outlook.com   | Manager         |  120000 | 2026-01-16
+      2 | Priya  | Singh  | priya.singh@outlook.com   | HR              |   45000 | 2026-01-16
+      7 | Neha   | Desai  | neha.desai@outlook.com    | IT              |   48000 | 2026-01-16
+      5 | Kavita | Rao    | kavita.rao@email.com      | HR              |   47000 | 2026-01-16
+      3 | Arjun  | Verma  | arjun.verma@gmail.com     | IT              |   55000 | 2026-01-16
+      9 | Anjali | Meheta | anjali.meheta@outlook.com | Finance         |   61000 | 2026-01-16
+     10 | Anjal  | Luitel | anjal.luitel@outlook.com  | General Manager |  500000 | 2026-01-16
+      6 | Amit   | Gupta  | amit.gupta@outlook.com    | Marketing       |   52000 | 2026-01-16
+(11 rows)
+
+
+ecommerce=# SELECT * FROM employees LIMIT 3;
+ emp_id | fname | lname  |          email          | dept | salary | hire_date
+--------+-------+--------+-------------------------+------+--------+------------
+      1 | Raj   | Sharma | raj.sharma@outlook.com  | IT   |  50000 | 2026-01-16
+      2 | Priya | Singh  | priya.singh@outlook.com | HR   |  45000 | 2026-01-16
+      3 | Arjun | Verma  | arjun.verma@gmail.com   | IT   |  55000 | 2026-01-16
+(3 rows)
+
+
+ecommerce=# SELECT * FROM employees WHERE fname like 'A%';
+ emp_id | fname  | lname  |           email           |      dept       | salary | hire_date
+--------+--------+--------+---------------------------+-----------------+--------+------------
+      3 | Arjun  | Verma  | arjun.verma@gmail.com     | IT              |  55000 | 2026-01-16
+      6 | Amit   | Gupta  | amit.gupta@outlook.com    | Marketing       |  52000 | 2026-01-16
+      9 | Anjali | Meheta | anjali.meheta@outlook.com | Finance         |  61000 | 2026-01-16
+     10 | Anjal  | Luitel | anjal.luitel@outlook.com  | General Manager | 500000 | 2026-01-16
+(4 rows)
+
+
+
 ```
