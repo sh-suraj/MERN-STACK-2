@@ -174,5 +174,21 @@
     "manufacturer": "Pentop Ltd",
     "image": "paracetamol.jpg",
     "status": "active"
+  },
+  {
+    "id": "MED051",
+    "name": "sinex 500mg",
+    "brand": "nivea",
+    "category": "Tablet",
+    "description": "Used to treat fever and mild to high pain.",
+    "price": 150,
+    "discountPercentage": 5,
+    "stock": 500,
+    "prescriptionRequired": true,
+    "dosage": "500 mg",
+    "expiryDate": "2027-05-01",
+    "manufacturer": "nivea Ltd",
+    "image": "sinex.jpg",
+    "status": "active"
   }
 ]
