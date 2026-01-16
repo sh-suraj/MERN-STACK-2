@@ -8,7 +8,8 @@ just **studying** not for **production**!!
 
 - **Node.js** – JavaScript runtime for server-side development
 - **Express.js** – Fast, unopinionated web framework for Node.js
-- **MongoDB** – NoSQL database for flexible data storage
+- **Postgresql** - 🐘 [PostgreSQL Notes & Practice](./src/postgresql_readme/)
+
 - **Mongoose** – ODM for MongoDB
 - **JWT** – Authentication & authorization
 - **dotenv** – Environment variable management
@@ -59,7 +60,7 @@ Delete from db
 DELETE FROM product
 WHERE id='001';
 
-Data Types: 
+Data Types:
 Numeric: INT DOUBLE FLOAT DECIMAL
 String: VARCHAR
 Date: DATE
