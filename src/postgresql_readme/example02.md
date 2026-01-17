@@ -174,8 +174,11 @@ store_db=# select * from orders;
 ### Types of Join
 
 - **Cross Join** - **_every row from one table is combined with every row from another table._**
-  syntax:
-  SELECT \* FROM customers CROSS JOIN orders;
+  - **_syntax:_**
+
+```sql
+SELECT * FROM customers CROSS JOIN orders;
+```
 
 ```sql
 --cross join--
@@ -237,11 +240,14 @@ store_db=# select * from customers cross join orders;
 ```
 
 - **Inner Join** - **_Returns only the rows where there is a match between the specified columns in both the left(or first) and right(or second) tables._**
-  syntax:
-  SELECT * FROM customers c
-  INNER JOIN
-  orders o
-  ON c.cust_id=o.cust_id;
+  - **_syntax:_**
+
+```sql
+    SELECT * FROM customers c
+    INNER JOIN
+    orders o
+    ON c.cust_id=o.cust_id;
+```
 
 ```sql
 store_db=# select * from customers c
@@ -257,8 +263,90 @@ store_db-# on c.cust_id=o.cust_id;
        3 | Sugam     |      6 | 2026-01-17 |    450 |       3
 (6 rows)
 
+--it doesnot shows the users who didn't placed orders as it only shows column where match happens;
+
+--lets group by customer name as it is showing double data of same customers,
+store_db=# SELECT c.cust_name, COUNT(o.ord_id), SUM(o.price) FROM customers c
+store_db-# inner join
+store_db-# orders o
+store_db-# on c.cust_id = o.cust_id
+store_db-# GROUP BY cust_name;
+ cust_name | count |  sum
+-----------+-------+--------
+ Rabin     |     1 |    599
+ Jenish    |     1 |    500
+ Anjal     |     2 | 524.99
+ Sugam     |     1 |    450
+ Diwash    |     1 |    100
+(5 rows)
+```
+
+- **Left Join**:
+  - **_Returns all rows from the left (or first) table and the matching rows from the right(or second) table._**
+  - syntax:
+
+```sql
+    SELECT * FROM customers c
+    LEFT JOIN
+    orders o
+    ON c.cust_id=o.cust_id;
+```
+
+```sql
+store_db=# select * from customers
+store_db-# c
+store_db-# left join orders o
+store_db-# on c.cust_id = o.cust_id;
+ cust_id | cust_name | ord_id |  ord_date  | price  | cust_id
+---------+-----------+--------+------------+--------+---------
+       1 | Anjal     |      1 | 2026-01-17 | 399.99 |       1
+       5 | Jenish    |      2 | 2026-01-17 |    500 |       5
+       2 | Diwash    |      3 | 2026-01-17 |    100 |       2
+       1 | Anjal     |      4 | 2026-01-17 |    125 |       1
+       4 | Rabin     |      5 | 2026-01-17 |    599 |       4
+       3 | Sugam     |      6 | 2026-01-17 |    450 |       3
+       8 | Ichcha    |        |            |        |
+       6 | Suraj     |        |            |        |
+       7 | Sheela    |        |            |        |
+(9 rows)
+
+--grouping them by customer name:
+store_db=# select c.cust_name, COUNT(o.ord_id) as no_of_orders, sum(o.price)
+store_db-# from customers c
+store_db-# left join orders o
+store_db-# on c.cust_id= o.cust_id
+store_db-# group by c.cust_name;
+ cust_name | no_of_orders |  sum
+-----------+--------------+--------
+ Suraj     |            0 |
+ Ichcha    |            0 |
+ Rabin     |            1 |    599
+ Jenish    |            1 |    500
+ Sheela    |            0 |
+ Anjal     |            2 | 524.99
+ Sugam     |            1 |    450
+ Diwash    |            1 |    100
+(8 rows)
 
 ```
 
-- **Left Join**
-- **Right Join**
+- **Right Join**:
+  - **_same as left join but shows second table all data and first table matching data_**
+  - syntax: <!-- same as left join just write right in place of left-->
+
+```sql
+select * from customers c
+right join orders o
+on c.cust_id = o.cust_id;
+
+--output--
+ cust_id | cust_name | ord_id |  ord_date  | price  | cust_id
+---------+-----------+--------+------------+--------+---------
+       1 | Anjal     |      1 | 2026-01-17 | 399.99 |       1
+       5 | Jenish    |      2 | 2026-01-17 |    500 |       5
+       2 | Diwash    |      3 | 2026-01-17 |    100 |       2
+       1 | Anjal     |      4 | 2026-01-17 |    125 |       1
+       4 | Rabin     |      5 | 2026-01-17 |    599 |       4
+       3 | Sugam     |      6 | 2026-01-17 |    450 |       3
+(6 rows)
+```
