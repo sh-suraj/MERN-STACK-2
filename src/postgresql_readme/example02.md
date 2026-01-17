@@ -414,7 +414,12 @@ institute=# select * from enrollment e join students s on e.s_id=s.s_id join cou
 (6 rows)
 
 --lets select what is important for us--
-institute=# select s.name,c.name,c.fee from enrollment e join students s on e.s_id=s.s_id join courses c on c.c_id=e.c_id;
+institute=#
+select s.name,c.name,c.fee
+from enrollment e
+join students s on e.s_id=s.s_id
+join courses c on c.c_id=e.c_id;
+--output--
   name  |  name   |   fee
 --------+---------+---------
  Diwash | CSIT    | 1000000
@@ -425,4 +430,19 @@ institute=# select s.name,c.name,c.fee from enrollment e join students s on e.s_
  Jenish | CSIT    | 1000000
 (6 rows)
 
+institute=#
+select s.name,SUM(c.fee) as total_paid from enrollment e
+join students s on e.s_id=s.s_id
+join courses c on c.c_id=e.c_id
+Group By s.name;
+--output--
+  name  | total_paid
+--------+------------
+ Jenish |    1700000
+ Anjal  |    2200000
+ Diwash |    2200000
+(3 rows)
+
 ```
+
+---
