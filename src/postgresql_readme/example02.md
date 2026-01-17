@@ -73,6 +73,10 @@ ecommerce-# GROUP BY sal_cat;
 
 - if we are using primary key of any table on another table it's a foreign key. it is used to make relationship.
 
+---
+
+# one to one relationship
+
 lets create a new database for this example
 Connect to PostgreSQL using psql
 Open your terminal or command prompt and connect to the PostgreSQL server as a superuser (typically postgres):
@@ -349,4 +353,76 @@ on c.cust_id = o.cust_id;
        4 | Rabin     |      5 | 2026-01-17 |    599 |       4
        3 | Sugam     |      6 | 2026-01-17 |    450 |       3
 (6 rows)
+```
+
+---
+
+# one to many relationship
+
+- TASK: we have two table students and courses and we need to make many to many relationship.
+  - to make many to many relationship we need to create a third table like student_course so data doesnot repeat.
+
+lets create a new database to show this -> db name : institute;
+
+<!-- i show this here as it is already shown above in one to one relationship section. -->
+
+```sql
+--step 1 lets create our 3 tables first--
+institute=# CREATE TABLE students(
+institute(# s_id SERIAL PRIMARY KEY,
+institute(# name VARCHAR(100) NOT NULL);
+CREATE TABLE
+institute=# CREATE TABLE courses(
+institute(# c_id SERIAL PRIMARY KEY,
+institute(# name VARCHAR(100) NOT NULL,
+institute(# fee NUMERIC NOT NULL DEFAULT 425000
+institute(# );
+CREATE TABLE
+institute=# CREATE TABLE enrollment(
+institute(# e_id SERIAL PRIMARY KEY,
+institute(# s_id INT NOT NULL,
+institute(# c_id INT NOT NULL,
+institute(# en_date DATE NOT NULL DEFAULT CURRENT_DATE,
+institute(# FOREIGN KEY(s_id) REFERENCES students(s_id),
+institute(# FOREIGN KEY(c_id) REFERENCES courses(c_id) );
+CREATE TABLE
+--step 2--inserting data--
+institute=#
+insert into students (name) values('Diwash'),('Anjal'),('Jenish');
+INSERT 0 3
+institute=#
+insert into courses(name, fee) values('CSIT',1000000),('NURSING', 1200000), ('MBBS', 700000);
+INSERT 0 3
+institute=#
+INSERT INTO enrollment (s_id,c_id,en_date) values(1,1,'2021-12-06'), (2,2,'2022-06-22'),(3,3,'2023-08-18'); --enrollment data
+INSERT 0 3
+institute=#
+insert into enrollment (s_id,c_id,en_date)
+values (1,2,'2026-01-12'), (2,1,'2026-01-18'),(3,1,'2026-01-13');
+--i created enrollment again to create many to many relationship
+INSERT 0 3
+
+--step 3-- lets do the db operations now--
+
+institute=# select * from enrollment e join students s on e.s_id=s.s_id join courses c on c.c_id=e.c_id;
+ e_id | s_id | c_id |  en_date   | s_id |  name  | c_id |  name   |   fee   ------+------+------+------------+------+--------+------+---------+---------    1 |    1 |    1 | 2021-12-06 |    1 | Diwash |    1 | CSIT    | 1000000
+    2 |    2 |    2 | 2022-06-22 |    2 | Anjal  |    2 | NURSING | 1200000
+    3 |    3 |    3 | 2023-08-18 |    3 | Jenish |    3 | MBBS    |  700000
+    4 |    1 |    2 | 2026-01-12 |    1 | Diwash |    2 | NURSING | 1200000
+    5 |    2 |    1 | 2026-01-18 |    2 | Anjal  |    1 | CSIT    | 1000000
+    6 |    3 |    1 | 2026-01-13 |    3 | Jenish |    1 | CSIT    | 1000000
+(6 rows)
+
+--lets select what is important for us--
+institute=# select s.name,c.name,c.fee from enrollment e join students s on e.s_id=s.s_id join courses c on c.c_id=e.c_id;
+  name  |  name   |   fee
+--------+---------+---------
+ Diwash | CSIT    | 1000000
+ Anjal  | NURSING | 1200000
+ Jenish | MBBS    |  700000
+ Diwash | NURSING | 1200000
+ Anjal  | CSIT    | 1000000
+ Jenish | CSIT    | 1000000
+(6 rows)
+
 ```
