@@ -1,4 +1,6 @@
-## CASE Expression
+# CASE Expression
+
+- here we study use of case expressions
 
 ```sql
 ecommerce=# select fname, salary, CASE
@@ -58,5 +60,180 @@ ecommerce-# GROUP BY sal_cat;
 
 
 ```
-## Relationship and its types;
 
+---
+
+# Relationship and its types:
+
+- 1:1 (one to one)
+- 1:many (one to many)
+- many-many
+
+## foreign key
+
+- if we are using primary key of any table on another table it's a foreign key. it is used to make relationship.
+
+lets create a new database for this example
+Connect to PostgreSQL using psql
+Open your terminal or command prompt and connect to the PostgreSQL server as a superuser (typically postgres):
+
+```shell
+psql -U postgres
+```
+
+Enter the password if prompted.
+
+Create the database
+Once connected, execute the CREATE DATABASE command followed by the desired database name:
+
+```shell
+CREATE DATABASE your_database_name; #i created a store_db
+```
+
+Replace your_database_name with the actual name (e.g., sales_db). Ensure the name is unique.
+
+```sql
+ecommerce=# create database store_db;
+CREATE DATABASE
+ecommerce=# \c store_db
+You are now connected to database "store_db" as user "postgres".
+store_db=#
+
+store_db=# CREATE TABLE customers(
+   cust_id SERIAL PRIMARY KEY,
+   cust_name VARCHAR(100) NOT NULL
+   );
+CREATE TABLE
+
+store_db=# CREATE TABLE orders(
+   ord_id SERIAL PRIMARY KEY,
+   ord_date DATE NOT NULL,
+   price NUMERIC NOT NULL,
+   cust_id INTEGER NOT NULL,
+   FOREIGN KEY(cust_id) REFERENCES
+   customers(cust_id)
+   );
+CREATE TABLE
+store_db=#
+store_db=# INSERT INTO customers(cust_name) VALUES('Anjal'),
+store_db-# ('Diwash'),
+store_db-# ('Sugam'),
+store_db-# ('Rabin'),
+store_db-# ('Jenish'),
+store_db-# ('Suraj'),
+store_db-# ('Sheela'),
+store_db-# ('Ichcha');
+INSERT 0 8
+
+--i forgot to give ord_date a defaut value, setting default value again:--
+store_db=# ALTER TABLE orders
+store_db-# ALTER COLUMN ord_date
+store_db-# SET DEFAULT CURRENT_DATE;
+ALTER TABLE
+
+--lets store data on orders now
+store_db=# insert into orders
+store_db-# (price, cust_id)
+store_db-# values
+store_db-# (399.99,1),(500,5),(100,2),(125,1),(599,4),(450,3);
+INSERT 0 6
+
+store_db=# select * from customers;
+ cust_id | cust_name
+---------+-----------
+       1 | Anjal
+       2 | Diwash
+       3 | Sugam
+       4 | Rabin
+       5 | Jenish
+       6 | Suraj
+       7 | Sheela
+       8 | Ichcha
+(8 rows)
+
+
+store_db=# select * from orders;
+ ord_id |  ord_date  | price  | cust_id
+--------+------------+--------+---------
+      1 | 2026-01-17 | 399.99 |       1
+      2 | 2026-01-17 |    500 |       5
+      3 | 2026-01-17 |    100 |       2
+      4 | 2026-01-17 |    125 |       1
+      5 | 2026-01-17 |    599 |       4
+      6 | 2026-01-17 |    450 |       3
+(6 rows)
+
+```
+
+---
+
+## JOINS
+
+    - **JOIN** operation is used to combine rows from two or more tables based on a related column between them.
+
+### Types of Join
+
+- **Cross Join** - **_every row from one table is combined with every row from another table_**
+- **Inner Join**
+
+- **Left Join**
+- **Right Join**
+
+```sql
+--cross join--
+store_db=# select * from customers cross join orders;
+ cust_id | cust_name | ord_id |  ord_date  | price  | cust_id
+---------+-----------+--------+------------+--------+---------
+       1 | Anjal     |      1 | 2026-01-17 | 399.99 |       1
+       2 | Diwash    |      1 | 2026-01-17 | 399.99 |       1
+       3 | Sugam     |      1 | 2026-01-17 | 399.99 |       1
+       4 | Rabin     |      1 | 2026-01-17 | 399.99 |       1
+       5 | Jenish    |      1 | 2026-01-17 | 399.99 |       1
+       6 | Suraj     |      1 | 2026-01-17 | 399.99 |       1
+       7 | Sheela    |      1 | 2026-01-17 | 399.99 |       1
+       8 | Ichcha    |      1 | 2026-01-17 | 399.99 |       1
+       1 | Anjal     |      2 | 2026-01-17 |    500 |       5
+       2 | Diwash    |      2 | 2026-01-17 |    500 |       5
+       3 | Sugam     |      2 | 2026-01-17 |    500 |       5
+       4 | Rabin     |      2 | 2026-01-17 |    500 |       5
+       5 | Jenish    |      2 | 2026-01-17 |    500 |       5
+       6 | Suraj     |      2 | 2026-01-17 |    500 |       5
+       7 | Sheela    |      2 | 2026-01-17 |    500 |       5
+       8 | Ichcha    |      2 | 2026-01-17 |    500 |       5
+       1 | Anjal     |      3 | 2026-01-17 |    100 |       2
+       2 | Diwash    |      3 | 2026-01-17 |    100 |       2
+       3 | Sugam     |      3 | 2026-01-17 |    100 |       2
+       4 | Rabin     |      3 | 2026-01-17 |    100 |       2
+       5 | Jenish    |      3 | 2026-01-17 |    100 |       2
+       6 | Suraj     |      3 | 2026-01-17 |    100 |       2
+       7 | Sheela    |      3 | 2026-01-17 |    100 |       2
+       8 | Ichcha    |      3 | 2026-01-17 |    100 |       2
+       1 | Anjal     |      4 | 2026-01-17 |    125 |       1
+       2 | Diwash    |      4 | 2026-01-17 |    125 |       1
+       3 | Sugam     |      4 | 2026-01-17 |    125 |       1
+       4 | Rabin     |      4 | 2026-01-17 |    125 |       1
+       5 | Jenish    |      4 | 2026-01-17 |    125 |       1
+       6 | Suraj     |      4 | 2026-01-17 |    125 |       1
+       7 | Sheela    |      4 | 2026-01-17 |    125 |       1
+       8 | Ichcha    |      4 | 2026-01-17 |    125 |       1
+       1 | Anjal     |      5 | 2026-01-17 |    599 |       4
+       2 | Diwash    |      5 | 2026-01-17 |    599 |       4
+       3 | Sugam     |      5 | 2026-01-17 |    599 |       4
+       4 | Rabin     |      5 | 2026-01-17 |    599 |       4
+       5 | Jenish    |      5 | 2026-01-17 |    599 |       4
+       6 | Suraj     |      5 | 2026-01-17 |    599 |       4
+       7 | Sheela    |      5 | 2026-01-17 |    599 |       4
+       8 | Ichcha    |      5 | 2026-01-17 |    599 |       4
+       1 | Anjal     |      6 | 2026-01-17 |    450 |       3
+       2 | Diwash    |      6 | 2026-01-17 |    450 |       3
+       3 | Sugam     |      6 | 2026-01-17 |    450 |       3
+       4 | Rabin     |      6 | 2026-01-17 |    450 |       3
+       5 | Jenish    |      6 | 2026-01-17 |    450 |       3
+       6 | Suraj     |      6 | 2026-01-17 |    450 |       3
+       7 | Sheela    |      6 | 2026-01-17 |    450 |       3
+       8 | Ichcha    |      6 | 2026-01-17 |    450 |       3
+(48 rows)
+
+--not useful, you can notice by results---
+
+```
