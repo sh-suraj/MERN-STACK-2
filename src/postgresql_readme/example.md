@@ -727,6 +727,7 @@ ecommerce=# \d users
 Indexes:
     "userdata_pkey" PRIMARY KEY, btree (id)
 
+
 ```
 
 ---
@@ -753,4 +754,45 @@ update users set contacts = '0' where id =1;
 --delete query deletes the entire row of database;
 DELETE FROM users where id =1; -- not recomemded
 --deletes entire row having id=1;
+```
+
+### check constraints:
+
+```sql
+alter table users
+add column mobile varchar(15) unique check(length(mobile)>=10);
+
+
+ecommerce=# \d users
+                                     Table "public.users"
+ Column |         Type          | Collation | Nullable |               Default
+--------+-----------------------+-----------+----------+--------------------------------------
+ id     | integer               |           | not null | nextval('userdata_id_seq'::regclass)
+ name   | character varying(50) |           |          |
+ role   | character varying(7)  |           |          | 'buyer'::character varying
+ mobile | character varying(15) |           |          |
+Indexes:
+    "userdata_pkey" PRIMARY KEY, btree (id)
+    "users_mobile_key" UNIQUE CONSTRAINT, btree (mobile)
+Check constraints:
+    "users_mobile_check" CHECK (length(mobile::text) >= 10) --check constraint we added--
+
+
+--checking if check is working--
+ecommerce=# insert into users(mobile) values(123456789);
+ERROR:  new row for relation "users" violates check constraint "users_mobile_check"
+DETAIL:  Failing row contains (8, null, buyer, 123456789).
+
+---Delete added constraint using Drop
+alter table users
+drop constraint users_mobile_check;
+
+```
+
+```sql
+---ADD added constraint using ADD
+
+alter table users
+add constraint users_mobile_check CHECK (length(mobile::text) >= 10);
+--here users_mobile_check is a named constraint
 ```
