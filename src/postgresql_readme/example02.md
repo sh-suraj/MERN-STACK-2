@@ -169,15 +169,13 @@ store_db=# select * from orders;
 
 ## JOINS
 
-    - **JOIN** operation is used to combine rows from two or more tables based on a related column between them.
+- **JOIN** operation is used to combine rows from two or more tables based on a related column between them.
 
 ### Types of Join
 
-- **Cross Join** - **_every row from one table is combined with every row from another table_**
-- **Inner Join**
-
-- **Left Join**
-- **Right Join**
+- **Cross Join** - **_every row from one table is combined with every row from another table._**
+  syntax:
+  SELECT \* FROM customers CROSS JOIN orders;
 
 ```sql
 --cross join--
@@ -237,3 +235,30 @@ store_db=# select * from customers cross join orders;
 --not useful, you can notice by results---
 
 ```
+
+- **Inner Join** - **_Returns only the rows where there is a match between the specified columns in both the left(or first) and right(or second) tables._**
+  syntax:
+  SELECT * FROM customers c
+  INNER JOIN
+  orders o
+  ON c.cust_id=o.cust_id;
+
+```sql
+store_db=# select * from customers c
+store_db-# inner join orders o
+store_db-# on c.cust_id=o.cust_id;
+ cust_id | cust_name | ord_id |  ord_date  | price  | cust_id
+---------+-----------+--------+------------+--------+---------
+       1 | Anjal     |      1 | 2026-01-17 | 399.99 |       1
+       5 | Jenish    |      2 | 2026-01-17 |    500 |       5
+       2 | Diwash    |      3 | 2026-01-17 |    100 |       2
+       1 | Anjal     |      4 | 2026-01-17 |    125 |       1
+       4 | Rabin     |      5 | 2026-01-17 |    599 |       4
+       3 | Sugam     |      6 | 2026-01-17 |    450 |       3
+(6 rows)
+
+
+```
+
+- **Left Join**
+- **Right Join**
