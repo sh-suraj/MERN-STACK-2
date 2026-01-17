@@ -122,10 +122,10 @@ VALUES
 
 ```sql
 SELECT
-c.cust_name,
-p.p_name,
+c.cust_name as customer,
+p.p_name as product,
 oi.quantity,
-o.ord_date,
+o.ord_date as order_date,
 p.price,
 CASE
 when o.ord_id=oi.ord_id then p.price*oi.quantity
@@ -141,17 +141,17 @@ JOIN
 customers c on o.cust_id = c.cust_id;
 
 --output--
- cust_name |  p_name   | quantity |  ord_date  | price  | total
------------+-----------+----------+------------+--------+--------
- Rabin     | Mouse     |        5 | 2082-08-22 |    500 |   2500
- Diwash    | Laptop    |        1 | 2082-09-01 | 100000 | 100000
- Diwash    | Laptop    |        1 | 2082-09-01 | 100000 | 100000
- Anjal     | Keyboard  |        5 | 2082-09-02 |   1000 |   5000
- Anjal     | Dcable    |        2 | 2082-09-02 |    500 |   1000
- Jenish    | Iphone 16 |        1 | 2082-08-23 |  55000 |  55000
- Jenish    | Dcable    |        1 | 2082-08-23 |    500 |    500
- Diwash    | Laptop    |        1 | 2082-09-24 | 100000 | 100000
- Diwash    | Mouse     |        1 | 2082-09-24 |    500 |    500
+  customer |  product  | quantity | order_date | price  | total
+----------+-----------+----------+------------+--------+--------
+ Rabin    | Mouse     |        5 | 2082-08-22 |    500 |   2500
+ Diwash   | Laptop    |        1 | 2082-09-01 | 100000 | 100000
+ Diwash   | Laptop    |        1 | 2082-09-01 | 100000 | 100000
+ Anjal    | Keyboard  |        5 | 2082-09-02 |   1000 |   5000
+ Anjal    | Dcable    |        2 | 2082-09-02 |    500 |   1000
+ Jenish   | Iphone 16 |        1 | 2082-08-23 |  55000 |  55000
+ Jenish   | Dcable    |        1 | 2082-08-23 |    500 |    500
+ Diwash   | Laptop    |        1 | 2082-09-24 | 100000 | 100000
+ Diwash   | Mouse     |        1 | 2082-09-24 |    500 |    500
 (9 rows)
 ```
 

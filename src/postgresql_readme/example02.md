@@ -446,3 +446,149 @@ Group By s.name;
 ```
 
 ---
+
+## a small project i did is on ecomstore folder
+
+# views
+
+- views are made to save a query so that we can run it next time as a shortcut, it saves lot of effort and time
+
+i made a project last time and the query was:
+
+```sql
+SELECT
+c.cust_name as customer,
+p.p_name as product,
+oi.quantity,
+o.ord_date as order_date,
+p.price,
+CASE
+when o.ord_id=oi.ord_id then p.price*oi.quantity
+END AS total
+FROM ord_items oi
+JOIN
+ products p on oi.p_id = p.p_id
+
+JOIN
+orders o on o.Ord_id = oi.ord_id
+
+JOIN
+customers c on o.cust_id = c.cust_id;
+
+ customer |  product  | quantity | order_date | price  | total
+----------+-----------+----------+------------+--------+--------
+ Rabin    | Mouse     |        5 | 2082-08-22 |    500 |   2500
+ Diwash   | Laptop    |        1 | 2082-09-01 | 100000 | 100000
+ Diwash   | Laptop    |        1 | 2082-09-01 | 100000 | 100000
+ Anjal    | Keyboard  |        5 | 2082-09-02 |   1000 |   5000
+ Anjal    | Dcable    |        2 | 2082-09-02 |    500 |   1000
+ Jenish   | Iphone 16 |        1 | 2082-08-23 |  55000 |  55000
+ Jenish   | Dcable    |        1 | 2082-08-23 |    500 |    500
+ Diwash   | Laptop    |        1 | 2082-09-24 | 100000 | 100000
+ Diwash   | Mouse     |        1 | 2082-09-24 |    500 |    500
+(9 rows)
+```
+
+- if i save this query as :
+
+```sql
+CREATE VIEW billing_info AS
+SELECT
+c.cust_name as customer,
+p.p_name as product,
+oi.quantity,
+o.ord_date as order_date,
+p.price,
+CASE
+when o.ord_id=oi.ord_id then p.price*oi.quantity
+END AS total
+FROM ord_items oi
+JOIN
+ products p on oi.p_id = p.p_id
+
+JOIN
+orders o on o.Ord_id = oi.ord_id
+
+JOIN
+customers c on o.cust_id = c.cust_id;
+
+```
+
+- **_now i can access it next time as_**
+
+```sql
+select * from billing info;
+```
+
+**_and stillresult is same and on the same line_**
+
+```sql
+select * from billing_info;
+
+-- result:
+ customer |  product  | quantity | order_date | price  | total
+----------+-----------+----------+------------+--------+--------
+ Rabin    | Mouse     |        5 | 2082-08-22 |    500 |   2500
+ Diwash   | Laptop    |        1 | 2082-09-01 | 100000 | 100000
+ Diwash   | Laptop    |        1 | 2082-09-01 | 100000 | 100000
+ Anjal    | Keyboard  |        5 | 2082-09-02 |   1000 |   5000
+ Anjal    | Dcable    |        2 | 2082-09-02 |    500 |   1000
+ Jenish   | Iphone 16 |        1 | 2082-08-23 |  55000 |  55000
+ Jenish   | Dcable    |        1 | 2082-08-23 |    500 |    500
+ Diwash   | Laptop    |        1 | 2082-09-24 | 100000 | 100000
+ Diwash   | Mouse     |        1 | 2082-09-24 |    500 |    500
+(9 rows)
+
+```
+
+this query is saved now
+
+```sql
+`psql 18`
+ecomstore=# \dv
+              List of views
+ Schema |     Name     | Type |  Owner
+--------+--------------+------+----------
+ public | billing_info | view | postgres
+(1 row)
+
+
+SELECT product, SUM(total) FROM billing_info
+GROUP BY product;
+  product  |  sum
+-----------+--------
+ Dcable    |   1500
+ Mouse     |   3000
+ Keyboard  |   5000
+ Iphone 16 |  55000
+ Laptop    | 300000
+(5 rows)
+```
+
+## Having vs where
+
+let me show you with example:
+
+```sql
+SELECT product, SUM(total) FROM billing_info
+GROUP BY product
+WHERE SUM(total)>1500;
+
+--output
+ERROR:  syntax error at or near "WHERE"
+LINE 3: WHERE SUM(total)>1500;
+
+SELECT product, SUM(total) FROM billing_info
+GROUP BY product
+HAVING SUM(total)>1500;
+--OUTPUT
+  product  |  sum
+-----------+--------
+ Mouse     |   3000
+ Keyboard  |   5000
+ Iphone 16 |  55000
+ Laptop    | 300000
+(4 rows)
+```
+
+# conclusion: after grouping, you must use "HAVING" instead of "WHERE".
