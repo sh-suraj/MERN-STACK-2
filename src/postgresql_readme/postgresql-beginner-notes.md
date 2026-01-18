@@ -1,173 +1,174 @@
-# 📘 1️⃣ `postgresql-beginner-notes.md`
+# PostgreSQL Beginner Notes 🐣
 
-````md
-# PostgreSQL Beginner Notes
-
-This document contains beginner-friendly PostgreSQL examples
-practiced using an `employees` table inside the `ecommerce` database.
+These notes explain PostgreSQL concepts in a **simple, progressive manner** with a focus on understanding.
 
 ---
 
-## Connecting to PostgreSQL
+## What is PostgreSQL?
 
-```bash
-psql -U postgres -d ecommerce
-````
-
----
-
-## Creating a Table
-
-```sql
-CREATE TABLE employees (
-  emp_id SERIAL PRIMARY KEY,
-  fname VARCHAR(50) NOT NULL,
-  lname VARCHAR(50) NOT NULL,
-  email VARCHAR(50) UNIQUE NOT NULL,
-  dept VARCHAR(20) DEFAULT 'Marketing',
-  salary INT DEFAULT 30000,
-  hire_date DATE DEFAULT CURRENT_DATE
-);
-```
+- Open-source **relational database**
+- ACID compliant
+- Uses SQL for data manipulation
+- Widely used in production systems
 
 ---
 
-## Inserting Data
+## SQL Execution Order (Very Important)
 
 ```sql
-INSERT INTO employees (fname, lname, email, dept, salary)
-VALUES ('Raj', 'Sharma', 'raj.sharma@outlook.com', 'IT', 50000);
+SELECT
+FROM
+WHERE
+GROUP BY
+HAVING
+ORDER BY
+LIMIT
 ```
+
+Actual execution:
+
+1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. ORDER BY
+7. LIMIT
 
 ---
 
-## SELECT Queries
+## WHERE vs HAVING
 
-### Fetch all records
-
-```sql
-SELECT * FROM employees;
-```
-
-### Fetch specific columns
-
-```sql
-SELECT fname, dept FROM employees;
-```
+| WHERE                | HAVING              |
+| -------------------- | ------------------- |
+| Filters rows         | Filters groups      |
+| Used before GROUP BY | Used after GROUP BY |
+| No aggregates        | Uses aggregates     |
 
 ---
 
-## WHERE Clause
+## CASE Expression
+
+Used to apply **conditional logic** in queries.
+
+Common use cases:
+
+- Salary categorization
+- Bonus calculation
+- Status labeling
 
 ```sql
-SELECT * FROM employees WHERE dept = 'IT';
-```
-
-### Logical Operators
-
-```sql
-SELECT * FROM employees WHERE dept = 'IT' AND salary > 50000;
+CASE
+ WHEN condition THEN value
+ ELSE value
+END
 ```
 
 ---
 
-## IN / NOT IN
+## Table Relationships
 
-```sql
-SELECT * FROM employees WHERE dept IN ('IT','HR');
-SELECT * FROM employees WHERE dept NOT IN ('IT','HR');
-```
+### 1️. One-to-One
 
----
+- One record ↔ one record
+- Rare in practice
 
-## BETWEEN
+### 2️. One-to-Many
 
-```sql
-SELECT * FROM employees
-WHERE salary BETWEEN 40000 AND 60000;
-```
+- One parent → many children
+- Most common relationship
 
----
+### 3️. Many-to-Many
 
-## DISTINCT
-
-```sql
-SELECT DISTINCT dept FROM employees;
-```
+- Requires a **junction table**
+- Prevents data duplication
 
 ---
 
-## ORDER BY
+## Foreign Key
 
-```sql
-SELECT * FROM employees ORDER BY fname ASC;
-SELECT * FROM employees ORDER BY fname DESC;
-```
-
----
-
-## LIMIT
-
-```sql
-SELECT * FROM employees LIMIT 3;
-```
+- References primary key of another table
+- Enforces **data integrity**
+- Prevents invalid data insertion
 
 ---
 
-## LIKE and Pattern Matching
+## Joins (Beginner Friendly)
 
-```sql
--- Names starting with A
-SELECT * FROM employees WHERE fname LIKE 'A%';
-
--- Names containing 'i'
-SELECT * FROM employees WHERE fname LIKE '%i%';
-
--- Exactly two characters (IT, HR)
-SELECT * FROM employees WHERE dept LIKE '__';
-```
-
-> ℹ️ `LIKE` is case-sensitive in PostgreSQL
-> Use `ILIKE` for case-insensitive search.
-
-```sql
-SELECT * FROM employees WHERE fname ILIKE 'a%';
-```
+| Join       | Meaning             |
+| ---------- | ------------------- |
+| INNER JOIN | Only matching rows  |
+| LEFT JOIN  | All left + matches  |
+| RIGHT JOIN | All right + matches |
+| CROSS JOIN | Cartesian product   |
 
 ---
 
-## Aggregate Functions
+## Views
 
-```sql
-SELECT COUNT(emp_id) FROM employees;
-SELECT SUM(salary) FROM employees;
-SELECT AVG(salary) FROM employees;
-SELECT MIN(salary), MAX(salary) FROM employees;
-```
+- Saved SQL queries
+- Behave like virtual tables
+- Used for:
 
----
-
-## GROUP BY
-
-```sql
-SELECT dept, COUNT(emp_id)
-FROM employees
-GROUP BY dept;
-```
-
-```sql
-SELECT dept, SUM(salary)
-FROM employees
-GROUP BY dept;
-```
+  - Simplifying complex queries
+  - Reusability
+  - Security
 
 ---
 
-## Key Learnings
+## Stored Procedures (Intro)
 
-* CRUD operations using SQL
-* Filtering and sorting data
-* Pattern matching with LIKE / ILIKE
-* Aggregate functions and grouping
+- Stored logic on DB server
+- Perform INSERT / UPDATE / DELETE
+- Called using `CALL`
 
-````
+---
+
+## User Defined Functions (Intro)
+
+- Return a value or table
+- Used inside SELECT queries
+- Ideal for reusable logic
+
+---
+
+## Window Functions (Basics)
+
+Operate on rows **without grouping them**.
+
+Examples:
+
+- ROW_NUMBER
+- RANK
+- DENSE_RANK
+- LAG / LEAD
+
+---
+
+## GROUP BY ROLLUP
+
+- Adds subtotal & total rows
+- Useful for reports
+
+---
+
+## Triggers (Intro)
+
+- Automatically execute on events
+- Maintain rules & integrity
+
+---
+
+## Common Beginner Mistakes
+
+❌ Using WHERE instead of HAVING
+❌ Missing GROUP BY columns
+❌ Data repetition in many-to-many
+❌ Confusing procedure vs function
+
+---
+
+## Learning Tip
+
+Write queries **step-by-step** and test each stage.
+Understanding beats memorization.

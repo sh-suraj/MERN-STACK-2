@@ -1,122 +1,129 @@
-#  `postgresql-interview-notes.md`
-```md
-# PostgreSQL Interview-Ready Notes
+# PostgreSQL Interview Notes
 
-Quick SQL revision notes with examples.
+Concise notes focused on **what interviewers actually ask**.
 
 ---
 
-## Difference Between WHERE and HAVING
+## WHERE vs HAVING
 
-- `WHERE` filters rows **before aggregation**
-- `HAVING` filters rows **after GROUP BY**
+- WHERE → filters rows
+- HAVING → filters aggregated results
 
 ```sql
-SELECT dept, COUNT(emp_id)
-FROM employees
 GROUP BY dept
-HAVING COUNT(emp_id) > 1;
-````
-
----
-
-## AND vs IN
-
-Bad:
-
-```sql
-WHERE dept = 'IT' AND dept = 'HR'
-```
-
-Correct:
-
-```sql
-WHERE dept IN ('IT','HR');
+HAVING SUM(salary) > 50000;
 ```
 
 ---
 
-## LIKE vs ILIKE
+## CASE Expression
 
-* `LIKE` → case-sensitive
-* `ILIKE` → case-insensitive
+Used for:
 
-```sql
-SELECT * FROM employees WHERE fname ILIKE 'a%';
-```
+- Conditional categorization
+- Business logic in queries
 
----
+Interview line:
 
-## COUNT(*) vs COUNT(column)
-
-```sql
-COUNT(*)        -- counts all rows
-COUNT(emp_id)   -- ignores NULL values
-```
+> CASE works like if-else inside SQL.
 
 ---
 
-## ORDER BY Execution Order
+## COUNT(\*) vs COUNT(column)
 
-```sql
-SELECT * FROM employees
-WHERE salary > 50000
-ORDER BY fname
-LIMIT 5;
-```
-
-Execution order:
-
-1. FROM
-2. WHERE
-3. SELECT
-4. ORDER BY
-5. LIMIT
+| COUNT(\*)            | COUNT(col)          |
+| -------------------- | ------------------- |
+| Counts all rows      | Ignores NULL        |
+| Faster in PostgreSQL | Used for validation |
 
 ---
 
-## GROUP BY Rule
+## Joins (Must Know)
 
-**Every selected column must be:**
-
-* inside an aggregate function OR
-* included in GROUP BY
-
-**Invalid:**
-
-```sql
-SELECT fname, COUNT(emp_id) FROM employees GROUP BY dept;
-```
-
-**Valid:**
-
-```sql
-SELECT dept, COUNT(emp_id) FROM employees GROUP BY dept;
-```
+- INNER → matching data
+- LEFT → find missing data
+- RIGHT → reverse of LEFT
+- CROSS → rarely used
 
 ---
 
-## BETWEEN (Inclusive)
+## Relationships
 
-```sql
-WHERE salary BETWEEN 40000 AND 60000;
-```
-
-Includes both 40000 and 60000.
+- One-to-Many → most common
+- Many-to-Many → use junction table
+- Foreign keys enforce integrity
 
 ---
 
-## Common Interview Questions
+## Views
 
-✔ Difference between DELETE and TRUNCATE
-✔ What is PRIMARY KEY vs UNIQUE
-✔ Why normalization matters
-✔ Index vs Primary Key
-✔ When to use GROUP BY
+- Stored queries
+- Simplify complex joins
+- Do not store data
+- Improve maintainability
 
 ---
 
-## Final Tip
+## Stored Procedure vs Function
 
-Explain queries **out loud** during interviews.
-Clarity > memorization.
+| Procedure      | Function       |
+| -------------- | -------------- |
+| Uses CALL      | Used in SELECT |
+| No return      | Must return    |
+| DML operations | Business logic |
+
+---
+
+## Window Functions
+
+Why important:
+
+- Analytics
+- Ranking
+- Comparisons
+
+Functions:
+
+- ROW_NUMBER
+- RANK
+- DENSE_RANK
+- LAG / LEAD
+
+---
+
+## CTE (WITH clause)
+
+- Temporary result set
+- Improves readability
+- Used once per query
+
+---
+
+## GROUP BY ROLLUP
+
+- Adds total rows
+- Used in reporting
+
+---
+
+## Triggers
+
+- Automatically run on events
+- Enforce rules
+- Prevent invalid data
+
+Common use:
+✔ Salary validation
+✔ Audit logging
+
+---
+
+## Final Interview Advice
+
+When explaining SQL:
+
+1. Explain the **problem**
+2. Walk through the **logic**
+3. Explain **why each clause is used**
+
+Clear reasoning beats complex syntax.
