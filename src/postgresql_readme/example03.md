@@ -332,3 +332,122 @@ FROM employees;
 (12 rows)
 
 ```
+
+---
+
+# CTE
+
+**CTE(COMMON TABLE EXPRESSION)** is a temporary result set that you can define within query to simplify complex sql statements.
+
+- syntax
+
+```sql
+WITH cte_name(optional_column_list) AS(
+        --cte query definition
+        SELECT ...
+)
+---main query refrencing the cte
+SELECT ...
+FROM cte_name
+WHERE ...;
+```
+
+**use case:**
+
+- we want to calculate the average salary per department and then find all employees whose salary is above the average salary of their department.
+
+```sql
+--code
+WITH avg_sal AS(
+select dept, avg(salary) as avg_salary from employees group by dept
+)
+
+SELECT
+e.emp_id, e.fname, e.dept, e.salary,a.avg_salary
+FROM employees e
+JOIN avg_sal a
+on a.dept=e.dept
+where e.salary>a.avg_salary;
+
+--output--
+ emp_id | fname  |  dept   | salary  |      avg_salary
+--------+--------+---------+---------+----------------------
+      5 | Kavita | HR      |   47000 |   46000.000000000000
+      1 | Raj    | IT      |   97000 |   67250.000000000000
+      3 | Arjun  | IT      |   71000 |   67250.000000000000
+     13 | Sheela | Finance | 8000000 | 2707000.000000000000
+(4 rows)
+```
+
+## use case 2: we want to find highest paid employee in each department;
+
+```sql
+--code
+WITH max_sal AS(
+select dept, max(salary) as max_salary
+from employees group by dept
+)
+
+select e.fname, m.dept, m.max_salary
+
+from employees e
+join max_sal m on m.dept = e.dept
+
+where e.salary= m.max_salary;
+
+--output
+ fname  |      dept       | max_salary
+--------+-----------------+------------
+ Kavita | HR              |      47000
+ Amit   | Marketing       |      52000
+ Rabin  | Manager         |     120000
+ Anjal  | General Manager |     500000
+ Raj    | IT              |      97000
+ Sheela | Finance         |    8000000
+(6 rows)
+```
+
+**_note: once CTE has been created it can only be used once unlike stored procedures. it will not be persisted._**
+
+---
+
+# TRIGGERS
+
+- **Triggers** are special procedures in database that automatically execute predefined actions in response to certain events on a specified table or view.
+- syntax
+
+```sql
+CREATE TRIGGER trigger_name
+{BEFORE|AFTER|INSTEAD OF}{INSERT|UPDATE|DELETE|TRUNCATE}
+ON table_name
+FOR EACH{ROW | STATEMENT}
+EXECUTE FUNCTION trigger_function_name();
+
+CREATE OR REPLACE trigger_function_name()
+RETURNS TRIGGER AS $$
+BEGIN
+        --Trigger logic here
+        RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+- **USE CASE:**
+  Create a trigger so that if we insert/update negative salary in a table it will be triggered and set to positive.
+
+```sql
+create or replace function check_salary()
+returns trigger as $$
+begin
+if new.salary<=0 then
+new.salary= (0-new.salary);
+end if;
+return new;
+end;
+$$language plpgsql;
+
+create trigger before_update_salary
+before update on employees
+for each row
+execute function check_salary();
+```
