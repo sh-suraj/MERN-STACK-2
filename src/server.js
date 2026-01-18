@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 
 import config from "./config/config.js";
 import productRoutes from "../src/routes/ProductRoute.js";
+import authRoutes from '../src/routes/authRoutes.js';
 const server = express();
 
 server.use(bodyParser.json());
@@ -24,6 +25,7 @@ server.put("/", (req, res) => {
 });
 
 server.use("/products", productRoutes);
+server.use("/auth", authRoutes)
 server.listen(config.port, () => {
   console.log(`server running at port ${config.port}`);
 });
