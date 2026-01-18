@@ -592,3 +592,38 @@ HAVING SUM(total)>1500;
 ```
 
 # conclusion: after grouping, you must use "HAVING" instead of "WHERE".
+
+## GROUP BY ROLLUP
+
+```sql
+ SELECT product, 
+SUM(total) as amount FROM billing_info
+GROUP BY ROLLUP (product)
+ORDER BY (amount);
+--rollup adds extra row and order by orders below each row
+  product  | amount
+-----------+--------
+ Dcable    |   1500
+ Mouse     |   3000
+ Keyboard  |   5000
+ Iphone 16 |  55000
+ Laptop    | 300000
+           | 364500  
+(6 rows)
+-- now to fill null row we can use coalesce
+SELECT 
+COALESCE(product, 'Total'), 
+SUM(total) as amount FROM billing_info
+GROUP BY ROLLUP (product)
+ORDER BY (amount);
+--output
+ coalesce  | amount
+-----------+--------
+ Dcable    |   1500
+ Mouse     |   3000
+ Keyboard  |   5000
+ Iphone 16 |  55000
+ Laptop    | 300000
+ Total     | 364500
+(6 rows)
+```
